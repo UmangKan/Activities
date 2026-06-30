@@ -4,12 +4,10 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
-import androidx.appcompat.app.AppCompatActivity
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.Button
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
@@ -20,21 +18,29 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.core.view.ViewCompat
-import androidx.core.view.WindowInsetsCompat
 import com.example.activities.ui.theme.ActivitiesTheme
 
 class SecondActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
+        val data = intent.extras
+
+            val messageExtra1 = data?.getString(Constants.INTENT_MESSAGE_KEY) ?:"No Message"
+            val messageExtra2 = data?.getString(Constants.INTENT_MESSAGE2_KEY)?:"No Message"
+            val numberExtra = data?.getInt(Constants.INTENT_NUMBER_KEY, 0) ?: 0
+
         setContent {
             ActivitiesTheme {
                 Surface(
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
                 ) {
-                    SecondActivityApp()
+                    SecondActivityApp(
+                        messageExtra1,
+                        messageExtra2,
+                        numberExtra
+                    )
                 }
             }
         }
@@ -42,15 +48,19 @@ class SecondActivity : ComponentActivity() {
 }
 
 @Composable
-fun SecondActivityApp()
+fun SecondActivityApp(message1: String, message2: String, number: Int)
 {
     ActivityCard(
-        activity2 = stringResource(R.string.activity_2)
+        activity2 = stringResource(R.string.activity_2),
+        receivedMessage1 = message1,
+        receivedMessage2 = message2,
+        receivedNumber = number
+
     )
 }
 
 @Composable
-fun ActivityCard(activity2: String, modifier: Modifier = Modifier){
+fun ActivityCard(activity2: String, receivedMessage1: String, receivedMessage2: String, receivedNumber: Int, modifier: Modifier = Modifier){
     Column(modifier = modifier.fillMaxSize(),
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center) {
@@ -58,6 +68,21 @@ fun ActivityCard(activity2: String, modifier: Modifier = Modifier){
             text = activity2,
             fontSize = 20.sp,
             modifier = Modifier.padding(16.dp)
+        )
+        Text(
+            text = "Message1: $receivedMessage1",
+            fontSize = 20.sp,
+            modifier= Modifier.padding(16.dp)
+        )
+        Text(
+            text = "Message2: $receivedMessage2",
+            fontSize = 20.sp,
+            modifier= Modifier.padding(16.dp)
+        )
+        Text(
+            text = "Number: $receivedNumber",
+            fontSize = 20.sp,
+            modifier= Modifier.padding(16.dp)
         )
     }
 }
@@ -69,6 +94,9 @@ fun ActivityCard(activity2: String, modifier: Modifier = Modifier){
 @Composable
 fun SecondActivityPreview() {
     ActivitiesTheme {
-        ActivityCard("Activity 2")
+        ActivityCard("Activity 2",
+            "message1",
+            "message 2",
+            23)
     }
 }

@@ -53,8 +53,11 @@ fun ActivityVar()
         activity1 = stringResource(R.string.activity_1),
         onClick = {
             val intent = Intent(context, SecondActivity::class.java)
-            context.startActivity(intent)
 
+            intent.putExtra(Constants.INTENT_MESSAGE_KEY,"Hello from first activity")
+            intent.putExtra(Constants.INTENT_MESSAGE2_KEY,"Hows it hanging?")
+            intent.putExtra(Constants.INTENT_NUMBER_KEY,3.14)
+            context.startActivity(intent)
         }
     )
 }
